@@ -1,4 +1,4 @@
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup
 from .types import UserCallbackActions, AdminCallbackActions
 
 
@@ -19,5 +19,14 @@ async def get_confirm_enterance_kb(user_id: int):
                 InlineKeyboardButton(text='❌', callback_data=f'admin_{AdminCallbackActions.REJECT_ENTERANCE}:{user_id}')
             ],
             [InlineKeyboardButton(text='Отмена', callback_data=f'admin_{AdminCallbackActions.CANCEL_ENTERANCE}:{user_id}')]
+        ]
+    )
+
+
+
+async def get_reply_qr_show_kb():
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [InlineKeyboardButton(text='Мой QR-код')]
         ]
     )

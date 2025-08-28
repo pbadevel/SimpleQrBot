@@ -1,22 +1,17 @@
-from aiogram import Router, types, F
+from aiogram import Router, types
 from aiogram.filters.command import CommandStart, CommandObject
 
 from src.database import SessionManager
 from src.users.service import UserService
-from src.middlewares import ChannelSubscriptionWare
-from src.qr_code import qr_genetator
 from src.logging import get_logger
 
 from ..texts import (
     START_USER_MESSAGE,
-    YOU_CANNOT_USE_QR,
-    CAPTION_TO_THE_QR,
     START_ADMIN_MESSAGE,
     CONFIRMATION_TEXT
 )
 from ..keyboard import show_qr, get_confirm_enterance_kb
-from ..types import UserCallbackActions
-from ..utils import get_qr_payload_from_user, decode_payload
+from ..utils import decode_payload
 
 
 

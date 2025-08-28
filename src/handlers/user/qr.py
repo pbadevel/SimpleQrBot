@@ -13,7 +13,7 @@ from ..texts import (
 
 from ..types import UserCallbackActions
 from ..utils import get_qr_payload_from_user
-
+from ..keyboard import get_reply_qr_show_kb
 
 
 router = Router()
@@ -35,6 +35,7 @@ async def manage_user_callbacks(cb: types.CallbackQuery):
 
     if action == UserCallbackActions.SHOW_QR:
         log.info("Try to show qr", user = user)
+        
         if user.qr_is_used:
             await cb.answer(
                 text=YOU_CANNOT_USE_QR,
@@ -43,11 +44,41 @@ async def manage_user_callbacks(cb: types.CallbackQuery):
             log.info('NOT Showed', user=user)
             return
         
-        await cb.answer()
+        try: await cb.message.delete()
+        except: pass
+
         await cb.message.answer_photo(
             photo = await qr_genetator.generate(
                 payload=await get_qr_payload_from_user(user)
             ),
-            caption=CAPTION_TO_THE_QR
+            caption=CAPTION_TO_THE_QR,
+            reply_markup=await get_reply_qr_show_kb()
         )
         log.info('Showed', user=user)
+
+
+@router.message(F.text == 'Мой QR-код')
+async def send_Qr_If_In_Chat(message: types.Message):
+
+    async with SessionManager.session() as session:
+        service = UserService(session)
+        user = await service.resolve_from_tg_user(message.from_user)
+
+    log.info("Try to show qr from reply", user = user)
+    
+    if user.qr_is_used:
+        await message.answer(
+            text=YOU_CANNOT_USE_QR,
+        )
+        log.info('NOT Showed', user=user)
+        return
+    
+
+    await message.answer_photo(
+        photo = await qr_genetator.generate(
+            payload=await get_qr_payload_from_user(user)
+        ),
+        caption=CAPTION_TO_THE_QR,
+        reply_markup=await get_reply_qr_show_kb()
+    )
+    log.info('Showed', user=user)

@@ -27,6 +27,6 @@ async def get_confirm_enterance_kb(user_id: int):
 async def get_reply_qr_show_kb():
     return ReplyKeyboardMarkup(
         keyboard=[
-            [InlineKeyboardButton(text='Мой QR-код')]
+            [KeyboardButton(text='Мой QR-код')]
         ]
     )

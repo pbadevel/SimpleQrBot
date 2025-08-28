@@ -4,6 +4,7 @@ from src.database import SessionManager
 from src.users.service import UserService
 from src.middlewares import ChannelSubscriptionWare
 from src.qr_code import qr_genetator
+from src.logging import get_logger
 
 from ..texts import (
     USER_CANNOT_USE_QR,
@@ -17,6 +18,7 @@ from ..types import AdminCallbackActions
 
 router = Router()
 
+log = get_logger()
 
 
 @router.callback_query(F.data.startswith('admin_'))
@@ -42,6 +44,7 @@ async def manage_user_callbacks(cb: types.CallbackQuery):
             
             await cb.answer()
             if user.qr_is_used:
+                log.info("Confitmed QR", user=UserWarning, admin_id=cb.from_user.id)
                 await cb.message.edit_text(
                     text = SUCCESS_UPDATED_USER_QR
                 )
@@ -55,7 +58,10 @@ async def manage_user_callbacks(cb: types.CallbackQuery):
             await cb.message.edit_text(
                 text=SUCCESSED.format('отклонено')
             )
+            log.info("Reject QR", user=UserWarning, admin_id=cb.from_user.id)
+
         else:
             await cb.message.edit_text(
                 text=SUCCESSED.format('отменено')
             )
+            log.info("Canceled QR", user=UserWarning, admin_id=cb.from_user.id)

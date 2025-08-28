@@ -6,11 +6,14 @@ from typing import (
     Callable, 
     Dict, 
     Awaitable,
+    TYPE_CHECKING
 )
 
 from src.config import settings
 from src.handlers.keyboard import show_qr
 
+if TYPE_CHECKING:
+    from aiogram.client.default import LinkPreviewOptions
 
 
 
@@ -64,7 +67,7 @@ class ChannelSubscriptionWare(BaseMiddleware):
         else:
             await event.answer(
                 text= text,
-                link_preview_options='link_preview_is_disabled',
+                link_preview_options=LinkPreviewOptions(is_disabled=True),
                 reply_markup=await show_qr()
             )
 

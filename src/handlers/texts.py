@@ -19,7 +19,7 @@ START_USER_MESSAGE = (
 
 
 YOU_CANNOT_USE_QR = (
-    "❌ Вы больше не можете использовать QR-code он уже был использован! ❌"
+    "❌ QR-code уже был использован! ❌"
 )
 
 USER_CANNOT_USE_QR = (

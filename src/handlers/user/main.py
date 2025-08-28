@@ -22,12 +22,6 @@ from ..utils import get_qr_payload_from_user, decode_payload
 
 router = Router()
 
-router.callback_query.outer_middleware(
-    middleware=ChannelSubscriptionWare()
-)
-router.message.outer_middleware(
-    middleware=ChannelSubscriptionWare()
-)
 
 log = get_logger()
 
@@ -73,31 +67,3 @@ async def start(message: types.Message, command: CommandObject):
                 ),
                 reply_markup=await show_qr()
             )
-
-
-@router.callback_query(F.data.startswith('user_'))
-async def manage_user_callbacks(cb: types.CallbackQuery):
-    action = cb.data.split('_')[-1]
-
-    async with SessionManager.session() as session:
-        service = UserService(session)
-        user = await service.resolve_from_tg_user(cb.from_user)
-
-    if action == UserCallbackActions.SHOW_QR:
-        log.info("Try to show qr", user = user)
-        if user.qr_is_used:
-            await cb.answer(
-                text=YOU_CANNOT_USE_QR,
-                show_alert=True
-            )
-            log.info('NOT Showed', user=user)
-            return
-        
-        await cb.answer()
-        await cb.message.answer_photo(
-            photo = await qr_genetator.generate(
-                payload=await get_qr_payload_from_user(user)
-            ),
-            caption=CAPTION_TO_THE_QR
-        )
-        log.info('Showed', user=user)

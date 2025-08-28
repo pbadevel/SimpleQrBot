@@ -2,7 +2,7 @@ from src.config import settings
 from src.database import SessionManager
 from src.logging import get_logger, configure
 from src.handlers.admin import admin_router
-from src.handlers.user import user_router
+from src.handlers.user import user_router, qr_router
 
 configure(is_dev=True)
 
@@ -33,7 +33,8 @@ async def main():
 
     dispatcher.include_routers(
         user_router,
-        admin_router
+        admin_router,
+        qr_router
     )
 
     try:

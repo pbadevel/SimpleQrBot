@@ -48,6 +48,10 @@ async def manage_user_callbacks(cb: types.CallbackQuery):
                 await cb.message.edit_text(
                     text = SUCCESS_UPDATED_USER_QR
                 )
+                await cb.bot.send_message(
+                    chat_id=user.id,
+                    text="✅ Ваша скидка была успешно применена!"
+                )
                 return
             
             await cb.message.edit_text(

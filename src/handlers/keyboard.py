@@ -28,5 +28,6 @@ async def get_reply_qr_show_kb():
     return ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text='Мой QR-код')]
-        ]
+        ],
+        resize_keyboard=True
     )

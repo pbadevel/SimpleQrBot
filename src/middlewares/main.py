@@ -1,6 +1,5 @@
 from aiogram import BaseMiddleware, types
 from aiogram.exceptions import TelegramBadRequest, TelegramForbiddenError
-from aiogram.client.default import LinkPreviewOptions
 
 from typing import (
     Any,  
@@ -65,7 +64,7 @@ class ChannelSubscriptionWare(BaseMiddleware):
         else:
             await event.answer(
                 text= text,
-                link_preview_options=LinkPreviewOptions(is_disabled=True),
+                link_preview_options='link_preview_is_disabled',
                 reply_markup=await show_qr()
             )
 

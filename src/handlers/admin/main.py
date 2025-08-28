@@ -43,10 +43,7 @@ async def manage_user_callbacks(cb: types.CallbackQuery):
             await cb.answer()
             if user.qr_is_used:
                 await cb.message.edit_text(
-                    text = SUCCESS_UPDATED_USER_QR.format(
-                        user.link_to_user,
-                        user.fullname
-                    )
+                    text = SUCCESS_UPDATED_USER_QR
                 )
                 return
             

@@ -1,5 +1,6 @@
 from aiogram import BaseMiddleware, types
 from aiogram.exceptions import TelegramBadRequest, TelegramForbiddenError
+from aiogram.client.default import LinkPreviewOptions
 
 from typing import (
     Any,  
@@ -9,7 +10,7 @@ from typing import (
 )
 
 from src.config import settings
-
+from src.handlers.keyboard import show_qr
 
 
 
@@ -46,11 +47,26 @@ class ChannelSubscriptionWare(BaseMiddleware):
                 )
             return
         
+        textCallback = (
+            f'Ты не подписался на канал! Просто подпишись на наш официальный Telegram канал: @siyihotpot_ramen\n'
+            '\n'
+            'После подписки нажми на кнопку “Получить” и забирай свой подарок! 🎁'
+        )
+        text = (
+            f'Ты не подписался на <a href="{settings.bot.chat_link}">канал</a>! Просто подпишись на наш официальный Telegram канал: @siyihotpot_ramen\n'
+            '\n'
+            'После подписки нажми на кнопку <b>“Получить”</b> и забирай свой подарок! 🎁'
+        )
         if isinstance(event, types.CallbackQuery):
-            await event.message.answer(f'Вы не подписаны на <a href="{settings.bot.chat_link}"> КАНАЛ </a>\n\nПодпишитесь и попробуйте снова!')
+            await event.answer(
+                text = textCallback,
+                show_alert=True
+            )
         else:
             await event.answer(
-                text=f'Вы не подписаны на <a href="{settings.bot.chat_link}"> КАНАЛ </a>\n\nПодпишитесь и попробуйте снова!'
+                text= text,
+                link_preview_options=LinkPreviewOptions(is_disabled=True),
+                reply_markup=await show_qr()
             )
 
         

@@ -6,7 +6,7 @@ from .types import UserCallbackActions, AdminCallbackActions
 async def show_qr():
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text='Показать QR-код', callback_data=f'user_{UserCallbackActions.SHOW_QR}')]
+            [InlineKeyboardButton(text='Получить', callback_data=f'user_{UserCallbackActions.SHOW_QR}')]
         ]
     )
 
